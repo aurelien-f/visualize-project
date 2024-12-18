@@ -15,6 +15,7 @@ export type ExperienceProps = {
     iframe: string;
   }[];
   loadingProject: number;
+  isLoadingProject: boolean;
 };
 
 export default function Home() {
@@ -54,14 +55,17 @@ export default function Home() {
   ];
 
   const [loadingProject, setLoadingProject] = useState(projects[0].id);
+  const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
   const handleProjectChange = (projectId: number) => {
     setLoadingProject(projectId);
+    setIsLoading(true);
   };
 
   const toggleView = () => {
     setIsMobile(!isMobile);
+    setIsLoading(true);
   };
 
   return (
@@ -110,9 +114,9 @@ export default function Home() {
           }}
         >
           {isMobile ? (
-            <ExperienceMobile projects={projects} loadingProject={loadingProject} />
+            <ExperienceMobile projects={projects} loadingProject={loadingProject} isLoadingProject={isLoading} />
           ) : (
-            <ExperienceDesktop projects={projects} loadingProject={loadingProject} />
+            <ExperienceDesktop projects={projects} loadingProject={loadingProject} isLoadingProject={isLoading} />
           )}
         </Canvas>
       </div>

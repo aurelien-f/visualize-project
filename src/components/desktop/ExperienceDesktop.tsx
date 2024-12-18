@@ -4,11 +4,11 @@ import TextComponent from '@/components/common/TextComponent';
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from '@react-three/drei';
 import { useEffect, useState } from 'react';
 
-export default function ExperienceDesktop({ projects, loadingProject }: ExperienceProps) {
+export default function ExperienceDesktop({ projects, loadingProject, isLoadingProject }: ExperienceProps) {
 
   const [currentProject, setCurrentProject] = useState(loadingProject);
   const computer = useGLTF('https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/macbook/model.gltf')
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(isLoadingProject || false);
 
   useEffect(() => {
     if (loadingProject !== currentProject) {

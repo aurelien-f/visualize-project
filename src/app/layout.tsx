@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Luckiest_Guy } from "next/font/google";
+import { Red_Hat_Display } from "next/font/google";
 import "./globals.css";
 
-const luckiestGuy = Luckiest_Guy({ subsets: ["latin"], weight: "400", variable: "--font-luckiest-guy" });
+const redHatDisplay = Red_Hat_Display({ subsets: ["latin"], weight: "400", variable: "--font-red-hat-display" });
 
 export const metadata: Metadata = {
   title: "Projet portfolio",
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={luckiestGuy.className}>{children}</body>
+      <body className={redHatDisplay.className}>{children}</body>
     </html>
   );
 }

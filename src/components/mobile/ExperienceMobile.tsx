@@ -4,11 +4,11 @@ import TextComponent from '@/components/common/TextComponent';
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from '@react-three/drei';
 import { useEffect, useState } from 'react';
 
-export default function ExperienceMobile({ projects, loadingProject }: ExperienceProps) {
+export default function ExperienceMobile({ projects, loadingProject, isLoadingProject }: ExperienceProps) {
 
   const [currentProject, setCurrentProject] = useState(loadingProject);
   const computer = useGLTF('https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf')
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(isLoadingProject || false);
 
   useEffect(() => {
     if (loadingProject !== currentProject) {
@@ -22,13 +22,13 @@ export default function ExperienceMobile({ projects, loadingProject }: Experienc
 
   return <>
     <color args={['#241a1a']} attach="background" />
-    <Environment preset="city" />
+    <Environment preset="warehouse" />
 
     <PresentationControls
       global
-      rotation={[-0.2, 0.1, 0]}
+      rotation={[-0.1, 0.1, 0]}
       polar={[- 0.4, 0.2]}
-      azimuth={[- 0.5, 0.85]}
+      azimuth={[- 0.2, 0.2]}
       config={{ mass: 2, tension: 400 }}
       snap={{ mass: 4, tension: 400 }}
     >
@@ -51,9 +51,10 @@ export default function ExperienceMobile({ projects, loadingProject }: Experienc
           <Html
             transform
             wrapperClass="htmlScreen"
-            distanceFactor={1.17}
-            position={[0.19, 1.32, 0]}
+            distanceFactor={1.62}
+            position={[0.175, 1.32, 0.06]}
             rotation-x={0}
+            rotation-y={0.02}
           >
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black rounded-2xl">
@@ -61,14 +62,14 @@ export default function ExperienceMobile({ projects, loadingProject }: Experienc
               </div>
             )}
             <iframe
-              className='w-[525px] h-[1100px] border-none bg-[#000000] rounded-3xl overflow-hidden'
+              className='w-[375px] h-[718px] border-none bg-[#000000] overflow-hidden'
               src={projects[currentProject].iframe}
               onLoad={() => setIsLoading(false)}
             />
           </Html>
         </primitive>
 
-        <TextComponent>
+        <TextComponent position={[2.8, 0.45, 0.75]} rotationY={-1.25} maxWidth={2.3} fontSize={0.24}>
           {projects[currentProject].tags}
         </TextComponent>
       </Float>
