@@ -111,13 +111,13 @@ export default function Home() {
                 )}
               </button>
             </div>
-            <div className={`w-full flex flex-col gap-0 md:gap-8 items-start fixed md:flex md:relative bg-[#241a1a] border-t border-white md:border-none md:bg-transparent bottom-0 right-0 z-20 transition-all duration-300 ease-in-out ${isFilterOpen ? 'bottom-16' : '-bottom-[105vh]'}`}>
+            <div className={`w-full flex flex-col gap-0 md:gap-8 items-start fixed md:flex md:relative bg-[#241a1a] border-t border-white md:border-none md:bg-transparent bottom-0 right-0 z-20 transition-all duration-300 ease-in-out ${isFilterOpen ? 'bottom-16 md:bottom-0' : '-bottom-[105vh] md:bottom-0'}`}>
               {projects.map((project) => {
                 return (
                   <div key={project.id} className="flex gap-6 md:flex-row border-b border-white md:border-none w-full px-6 py-2 md:py-0 md:px-0">
                     <button
                       onClick={() => handleProjectChange(project.id)}
-                      className={`text-xl md:~text-2xl/3xl tracking-wide font-base text-left font-bold hover:text-jaune transition-all duration-300 ease-in-out md:flex-shrink-0`}
+                      className={`text-xl md:~text-2xl/3xl tracking-wide w-full md:w-auto font-base text-left font-bold hover:text-jaune transition-all duration-300 ease-in-out md:flex-shrink-0`}
                     >
                       {project.title}
                     </button>
