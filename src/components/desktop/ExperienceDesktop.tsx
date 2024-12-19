@@ -12,7 +12,7 @@ export default function ExperienceDesktop({ projects, loadingProject, isLoadingP
   const [isLoading, setIsLoading] = useState(isLoadingProject || false);
 
   const primitivePosition = IsDesktopHook() ? { x: 1.6, y: -1.4, z: 0 } : { x: 0, y: -1.4, z: 0 };
-  const textPosition: [number, number, number] = IsDesktopHook() ? [3.2, 0.45, 0.25] : [0, 2, 0.25];
+  const textPosition: [number, number, number] = IsDesktopHook() ? [3.2, 0.45, 0.25] : [-0.1, 2, 0.25];
   const textRotationY = IsDesktopHook() ? -1.35 : 0;
   const textFontSize = IsDesktopHook() ? 0.28 : 0.20;
 

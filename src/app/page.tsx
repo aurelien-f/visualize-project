@@ -7,6 +7,7 @@ import { Canvas } from "@react-three/fiber";
 import { useState } from "react";
 import { GoDeviceDesktop } from "react-icons/go";
 import { ImMobile } from "react-icons/im";
+import { IoFilterSharp } from "react-icons/io5";
 
 export type ExperienceProps = {
   projects: {
@@ -60,10 +61,12 @@ export default function Home() {
   const [loadingProject, setLoadingProject] = useState(projects[0].id);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const handleProjectChange = (projectId: number, isMobile?: boolean) => {
     if (projectId !== loadingProject) {
       setLoadingProject(projectId);
+      setIsFilterOpen(false);
       if (isMobile !== undefined) {
         setIsMobile(isMobile);
       }
@@ -82,33 +85,54 @@ export default function Home() {
   const cameraPosition: [number, number, number] = IsDesktopHook() ? [-1, 1.5, 5] : [-1, 1.5, 8];
 
   return (
-    <main className="w-screen flex flex-col md:flex-row relative overflow-x-hidden bg-[#241a1a]">
+    <main className="w-screen flex flex-col md:flex-row h-screen md:h-auto selection:relative overflow-x-hidden bg-[#241a1a]">
       <div className="w-full md:w-[40vw] md:h-screen flex flex-col justify-center items-center md:absolute top-0 left-0 z-10 py-[8vw] px-6 md:pl-12">
         <div>
-          <h1 className="text-jaune ~text-2xl/5xl text-left mb-14 tracking-wide font-fjalla">
+          <h1 className="text-jaune text-center md:text-left ~text-2xl/5xl mb-14 tracking-wide font-fjalla">
             Découvrez mes projets
           </h1>
-          <div className="inline-flex flex-col gap-8 md:gap-[3.2vw] w-full items-start">
-            {projects.map((project) => {
-              return (
-                <div key={project.id} className="flex gap-4 flex-row-reverse md:flex-row">
-                  <button
-                    onClick={() => handleProjectChange(project.id)}
-                    className={`~text-2xl/4xl tracking-wide font-base text-left font-bold hover:text-jaune transition-all duration-300 ease-in-out md:flex-shrink-0`}
-                  >
-                    {project.title}
-                  </button>
-                  <div className="flex gap-4 p-2 md:border-l pr-4 md:pr-0 md:pl-4 border-white border-r md:border-r-0">
-                    <button onClick={() => handleProjectChange(project.id, false)}><GoDeviceDesktop className="size-8 md:size-10 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
-                    <button onClick={() => handleProjectChange(project.id, true)}><ImMobile className="size-8 md:size-10 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
+          <div className="inline-flex w-full md:w-auto relative z-40">
+            <div
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="md:hidden z-30 flex items-center cursor-pointer justify-between gap-4 bg-white/10 backdrop-blur-sm px-4 h-16 w-full fixed bottom-0 right-0"
+            >
+              <IoFilterSharp className="size-6 text-white" />
+              <span className="text-white text-xl font-bold">{projects[loadingProject].title}</span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleView();
+                }}
+              >
+                {isMobile ? (
+                  <GoDeviceDesktop className="size-6 text-white" />
+                ) : (
+                  <ImMobile className="size-6 text-white" />
+                )}
+              </button>
+            </div>
+            <div className={`w-full flex flex-col gap-0 md:gap-8 items-start fixed md:flex md:relative bg-[#241a1a] border-t border-white md:border-none md:bg-transparent bottom-0 right-0 z-20 transition-all duration-300 ease-in-out ${isFilterOpen ? 'bottom-16' : '-bottom-full'}`}>
+              {projects.map((project) => {
+                return (
+                  <div key={project.id} className="flex gap-6 md:flex-row border-b border-white md:border-none w-full px-6 py-2 md:py-0 md:px-0">
+                    <button
+                      onClick={() => handleProjectChange(project.id)}
+                      className={`text-xl md:~text-2xl/3xl tracking-wide font-base text-left font-bold hover:text-jaune transition-all duration-300 ease-in-out md:flex-shrink-0`}
+                    >
+                      {project.title}
+                    </button>
+                    <div className="hidden gap-4 p-2 md:border-l pr-4 md:pr-0 md:pl-6 border-white border-r md:border-r-0 md:flex">
+                      <button onClick={() => handleProjectChange(project.id, false)}><GoDeviceDesktop className="size-8 md:size-10 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
+                      <button onClick={() => handleProjectChange(project.id, true)}><ImMobile className="size-8 md:size-10 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
-      <div className="w-full md:w-auto  flex items-center justify-center flex-col mt-8 md:mt-0 md:absolute md:top-8 md:right-8 z-20">
+      <div className="w-full md:w-auto hidden md:flex items-center justify-center flex-col mt-8 md:mt-0 md:absolute md:top-8 md:right-8 z-20">
         <label className='flex cursor-pointer select-none items-center gap-4' >
           <p className="text-white text-xl font-bold tracking-wide">Desktop</p>
           <div className='relative'>
@@ -127,7 +151,7 @@ export default function Home() {
           <p className="text-white text-xl font-bold tracking-wide">Mobile</p>
         </label>
       </div>
-      <div className="w-full h-screen md:sticky top-0 left-0 z-0 overflow-hidden">
+      <div className="w-full h-screen absolute md:sticky top-0 left-0 z-0 overflow-hidden">
         <Canvas
           className="touch-none w-full h-full"
           camera={{

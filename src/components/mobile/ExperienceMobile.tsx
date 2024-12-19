@@ -24,7 +24,7 @@ export default function ExperienceMobile({ projects, loadingProject, isLoadingPr
 
   const primitivePosition = IsDesktopHook() ? { x: 1.2, y: -1.2, z: 0 } : { x: 0, y: -1.4, z: 0 };
   const primitiveScale = IsDesktopHook() ? 0.8 : 1;
-  const textPosition: [number, number, number] = IsDesktopHook() ? [2.8, 0.45, 0.75] : [0, 2.2, 0.25];
+  const textPosition: [number, number, number] = IsDesktopHook() ? [2.8, 0.45, 0.75] : [0.1, 2.1, 0.25];
   const textRotationY = IsDesktopHook() ? -1.25 : 0;
   const textFontSize = IsDesktopHook() ? 0.24 : 0.20;
 
