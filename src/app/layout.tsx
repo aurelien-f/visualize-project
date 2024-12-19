@@ -4,9 +4,11 @@ import "./globals.css";
 
 const redHatDisplay = Red_Hat_Display({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-red-hat-display" });
 const fjallaOne = Fjalla_One({ subsets: ["latin"], weight: ["400",], variable: "--font-fjalla-one" });
+
+
 export const metadata: Metadata = {
-  title: "Projet portfolio",
-  description: "Liste des projets sous forme d'affiche 3D",
+  title: "Aurélie Feuillard - Visualize projects",
+  description: "Portfolio 3D de présentation de quelques unes des mes réalisations.",
 };
 
 export default function RootLayout({
