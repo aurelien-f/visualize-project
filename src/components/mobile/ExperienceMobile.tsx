@@ -1,6 +1,7 @@
 "use client";
 import { ExperienceProps } from '@/app/page';
 import TextComponent from '@/components/common/TextComponent';
+import { IsDesktopHook } from '@/utils/isDesktop';
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from '@react-three/drei';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -20,6 +21,12 @@ export default function ExperienceMobile({ projects, loadingProject, isLoadingPr
       }
     }
   }, [currentProject, projects, loadingProject]);
+
+  const primitivePosition = IsDesktopHook() ? { x: 1.2, y: -1.2, z: 0 } : { x: 0, y: -1.4, z: 0 };
+  const primitiveScale = IsDesktopHook() ? 0.8 : 1;
+  const textPosition: [number, number, number] = IsDesktopHook() ? [2.8, 0.45, 0.75] : [0, 2.2, 0.25];
+  const textRotationY = IsDesktopHook() ? -1.25 : 0;
+  const textFontSize = IsDesktopHook() ? 0.24 : 0.20;
 
   return <>
     <color args={['#241a1a']} attach="background" />
@@ -45,9 +52,9 @@ export default function ExperienceMobile({ projects, loadingProject, isLoadingPr
 
         <primitive
           object={computer.scene}
-          position-y={-1.2}
-          position-x={1.2}
-          scale={0.8}
+          position-y={primitivePosition.y}
+          position-x={primitivePosition.x}
+          scale={primitiveScale}
         >
           <Html
             transform
@@ -81,7 +88,7 @@ export default function ExperienceMobile({ projects, loadingProject, isLoadingPr
           </Html>
         </primitive>
 
-        <TextComponent position={[2.8, 0.45, 0.75]} rotationY={-1.25} maxWidth={2.3} fontSize={0.24}>
+        <TextComponent position={textPosition} rotationY={textRotationY} maxWidth={2.3} fontSize={textFontSize}>
           {projects[currentProject].tags}
         </TextComponent>
       </Float>

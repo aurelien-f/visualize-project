@@ -2,9 +2,9 @@
 
 import ExperienceDesktop from "@/components/desktop/ExperienceDesktop";
 import ExperienceMobile from "@/components/mobile/ExperienceMobile";
+import { IsDesktopHook } from "@/utils/isDesktop";
 import { Canvas } from "@react-three/fiber";
 import { useState } from "react";
-
 export type ExperienceProps = {
   projects: {
     id: number;
@@ -47,7 +47,7 @@ export default function Home() {
     {
       id: 3,
       title: "Davy baborier",
-      shadowColor: "#ff6900",
+      shadowColor: "#11cd40",
       img: "/Davy-baborier-16-12-2024.png",
       tags: "Site administrable\ngestion de projet\n2024",
       iframe: "https://davybaborier.fr/",
@@ -68,11 +68,31 @@ export default function Home() {
     setIsLoading(true);
   };
 
+  const cameraPosition: [number, number, number] = IsDesktopHook() ? [-1, 1.5, 5] : [-1, 1.5, 8];
+
   return (
-    <main className="w-screen flex relative overflow-x-hidden bg-[#241a1a]">
-      <div className="absolute top-4 right-4 z-20">
-        <p className="text-white text-sm text-center tracking-wide">Version responsive</p>
-        <label className='flex cursor-pointer select-none items-center gap-2' >
+    <main className="w-screen flex flex-col md:flex-row relative overflow-x-hidden bg-[#241a1a]">
+      <div className="w-full md:w-[40vw] md:absolute top-0 left-0 z-10 py-[8vw]">
+        <h1 className="text-white ~text-2xl/5xl text-center mb-14 tracking-wide font-bold">
+          Découvrez mes projets
+        </h1>
+        <div className="flex flex-col gap-[3.2vw] w-full justify-center px-8">
+          {projects.map((project) => {
+            return (
+              <button
+                key={project.id}
+                onClick={() => handleProjectChange(project.id)}
+                className={`~text-2xl/5xl tracking-wide font-base font-bold hover:text-[#b3b3b3] transition-all duration-300 ease-in-out`}
+              >
+                {project.title}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="w-full md:w-auto  flex items-center justify-center  flex-col md:flex-row  mt-8 md:mt-0 md:absolute md:top-6 md:right-[10vw] z-20">
+        <p className="text-white text-xl text-center tracking-wide mb-4 font-bold">Version responsive</p>
+        <label className='flex cursor-pointer select-none items-center gap-4' >
           <p className="text-white text-sm tracking-wide">Desktop</p>
           <div className='relative'>
             <input
@@ -90,27 +110,14 @@ export default function Home() {
           <p className="text-white text-sm tracking-wide">Mobile</p>
         </label>
       </div>
-      <div className="w-[40vw] absolute top-0 left-0 z-10 py-[8vw]">
-        <div className="flex flex-col gap-[5.2vw] w-full justify-center px-8">
-          {projects.map((project) => (
-            <button
-              key={project.id}
-              onClick={() => handleProjectChange(project.id)}
-              className="~text-2xl/6xl tracking-wide font-base font-bold"
-            >
-              {project.title}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="w-full h-screen sticky top-0 left-0 z-0">
+      <div className="w-full h-screen md:sticky top-0 left-0 z-0 overflow-hidden">
         <Canvas
           className="touch-none w-full h-full"
           camera={{
             fov: 45,
             near: 0.1,
             far: 2000,
-            position: [-1, 1.5, 5]
+            position: cameraPosition
           }}
         >
           {isMobile ? (

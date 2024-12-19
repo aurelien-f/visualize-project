@@ -1,6 +1,7 @@
 "use client";
 import { ExperienceProps } from '@/app/page';
 import TextComponent from '@/components/common/TextComponent';
+import { IsDesktopHook } from '@/utils/isDesktop';
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from '@react-three/drei';
 import { useEffect, useState } from 'react';
 
@@ -9,6 +10,11 @@ export default function ExperienceDesktop({ projects, loadingProject, isLoadingP
   const [currentProject, setCurrentProject] = useState(loadingProject);
   const computer = useGLTF('https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/macbook/model.gltf')
   const [isLoading, setIsLoading] = useState(isLoadingProject || false);
+
+  const primitivePosition = IsDesktopHook() ? { x: 1.6, y: -1.4, z: 0 } : { x: 0, y: -1.4, z: 0 };
+  const textPosition: [number, number, number] = IsDesktopHook() ? [3.2, 0.45, 0.25] : [0, 2, 0.25];
+  const textRotationY = IsDesktopHook() ? -1.35 : 0;
+  const textFontSize = IsDesktopHook() ? 0.28 : 0.20;
 
   useEffect(() => {
     if (loadingProject !== currentProject) {
@@ -44,8 +50,8 @@ export default function ExperienceDesktop({ projects, loadingProject, isLoadingP
 
         <primitive
           object={computer.scene}
-          position-y={-1.4}
-          position-x={1.6}
+          position-y={primitivePosition.y}
+          position-x={primitivePosition.x}
         >
           <Html
             transform
@@ -67,7 +73,7 @@ export default function ExperienceDesktop({ projects, loadingProject, isLoadingP
           </Html>
         </primitive>
 
-        <TextComponent>
+        <TextComponent position={textPosition} rotationY={textRotationY} fontSize={textFontSize}>
           {projects[currentProject].tags}
         </TextComponent>
       </Float>
