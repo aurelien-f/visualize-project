@@ -111,7 +111,7 @@ export default function Home() {
                 )}
               </button>
             </div>
-            <div className={`w-full flex flex-col gap-0 md:gap-8 items-start fixed md:flex md:relative bg-[#241a1a] border-t border-white md:border-none md:bg-transparent bottom-0 right-0 z-20 transition-all duration-300 ease-in-out ${isFilterOpen ? 'bottom-16 md:bottom-0' : '-bottom-[105vh] md:bottom-0'}`}>
+            <div className={`w-full flex flex-col gap-0 md:gap-8 items-start fixed md:flex md:relative bg-[#241a1a] border-t border-white md:border-none md:bg-transparent bottom-0 right-0 z-20 transition-all duration-300 ease-in-out ${isFilterOpen ? 'bottom-16 top-auto md:bottom-0' : 'top-full bottom-0 md:top0'}`}>
               {projects.map((project) => {
                 return (
                   <div key={project.id} className="flex gap-6 md:flex-row border-b border-white md:border-none w-full px-6 py-2 md:py-0 md:px-0">
