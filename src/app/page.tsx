@@ -1,28 +1,12 @@
 "use client";
 
-import ExperienceDesktop from "@/components/desktop/ExperienceDesktop";
-import ExperienceMobile from "@/components/mobile/ExperienceMobile";
-import { IsDesktopHook } from "@/utils/isDesktop";
-import { Canvas } from "@react-three/fiber";
+import CanvaComponent from "@/components/common/Canva";
 import { useState } from "react";
 import { GoDeviceDesktop } from "react-icons/go";
 import { ImMobile } from "react-icons/im";
 import { IoFilterSharp } from "react-icons/io5";
-
-export type ExperienceProps = {
-  projects: {
-    id: number;
-    title: string;
-    img: string;
-    shadowColor: string;
-    tags: string;
-    iframe: string;
-  }[];
-  loadingProject: number;
-  isLoadingProject: boolean;
-};
-
 export default function Home() {
+
   const projects = [
     {
       id: 0,
@@ -82,8 +66,6 @@ export default function Home() {
     setIsLoading(true);
   };
 
-  const cameraPosition: [number, number, number] = IsDesktopHook() ? [-1, 1.5, 5] : [-1, 1.5, 8];
-
   return (
     <main className="w-screen flex flex-col md:flex-row h-screen md:h-auto selection:relative overflow-x-hidden bg-[#241a1a]">
       <div className="w-full md:w-[40vw] md:h-screen flex flex-col justify-center items-center md:absolute top-0 left-0 z-10 py-[8vw] px-6 md:pl-12">
@@ -122,8 +104,8 @@ export default function Home() {
                       {project.title}
                     </button>
                     <div className="hidden gap-4 p-2 md:border-l pr-4 md:pr-0 md:pl-6 border-white border-r md:border-r-0 md:flex">
-                      <button onClick={() => handleProjectChange(project.id, false)}><GoDeviceDesktop className="size-8 md:size-10 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
-                      <button onClick={() => handleProjectChange(project.id, true)}><ImMobile className="size-8 md:size-10 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
+                      <button onClick={() => handleProjectChange(project.id, false)}><GoDeviceDesktop className="size-8 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
+                      <button onClick={() => handleProjectChange(project.id, true)}><ImMobile className="size-8 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
                     </div>
                   </div>
                 );
@@ -151,23 +133,7 @@ export default function Home() {
           <p className="text-white text-xl font-bold tracking-wide">Mobile</p>
         </label>
       </div>
-      <div className="w-full h-screen absolute md:sticky top-0 left-0 z-0 overflow-hidden">
-        <Canvas
-          className="touch-none w-full h-full"
-          camera={{
-            fov: 45,
-            near: 0.1,
-            far: 2000,
-            position: cameraPosition
-          }}
-        >
-          {isMobile ? (
-            <ExperienceMobile projects={projects} loadingProject={loadingProject} isLoadingProject={isLoading} />
-          ) : (
-            <ExperienceDesktop projects={projects} loadingProject={loadingProject} isLoadingProject={isLoading} />
-          )}
-        </Canvas>
-      </div>
+      <CanvaComponent projects={projects} loadingProject={loadingProject} isLoadingProject={isLoading} isMobile={isMobile} />
     </main>
   );
 }
