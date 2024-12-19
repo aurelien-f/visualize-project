@@ -94,7 +94,7 @@ export default function Home() {
                 <div key={project.id} className="flex gap-4 flex-row-reverse md:flex-row">
                   <button
                     onClick={() => handleProjectChange(project.id)}
-                    className={`~text-2xl/4xl tracking-wide font-base text-left font-bold hover:text-[#b3b3b3] transition-all duration-300 ease-in-out flex-shrink-0`}
+                    className={`~text-2xl/4xl tracking-wide font-base text-left font-bold hover:text-[#b3b3b3] transition-all duration-300 ease-in-out md:flex-shrink-0`}
                   >
                     {project.title}
                   </button>
