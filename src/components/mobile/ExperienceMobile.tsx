@@ -2,8 +2,9 @@
 import { ExperienceProps } from '@/app/page';
 import TextComponent from '@/components/common/TextComponent';
 import { ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from '@react-three/drei';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
+import MaskIphoneX from '/public/mask-iphone-x.webp';
 export default function ExperienceMobile({ projects, loadingProject, isLoadingProject }: ExperienceProps) {
 
   const [currentProject, setCurrentProject] = useState(loadingProject);
@@ -56,16 +57,27 @@ export default function ExperienceMobile({ projects, loadingProject, isLoadingPr
             rotation-x={0}
             rotation-y={0.02}
           >
-            {isLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black rounded-2xl">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white"></div>
-              </div>
-            )}
-            <iframe
-              className='w-[375px] h-[718px] border-none bg-[#000000] overflow-hidden'
-              src={projects[currentProject].iframe}
-              onLoad={() => setIsLoading(false)}
-            />
+            <div className='w-[375px] h-[804px] border-none bg-[#241a1a] relative flex items-center justify-center rounded-[50px]'>
+              {isLoading && (
+                <div className="absolute flex items-center z-20 justify-center bg-[#241a1a] rounded-[50px] w-full h-full">
+                  <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white"></div>
+                </div>
+              )}
+              <figure className='absolute top-0 left-0 z-10 w-full h-full clip-path-iphone-x'>
+                <Image
+                  src={MaskIphoneX}
+                  alt={"mask-iphone-x"}
+                  width={375}
+                  height={718}
+                  className='w-full h-full object-cover z-0'
+                />
+              </figure>
+              <iframe
+                className='w-[375px] h-[718px] border-none relative z-0  overflow-hidden'
+                src={projects[currentProject].iframe}
+                onLoad={() => setIsLoading(false)}
+              />
+            </div>
           </Html>
         </primitive>
 
