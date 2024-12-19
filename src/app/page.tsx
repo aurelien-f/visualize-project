@@ -85,7 +85,7 @@ export default function Home() {
     <main className="w-screen flex flex-col md:flex-row relative overflow-x-hidden bg-[#241a1a]">
       <div className="w-full md:w-[40vw] md:h-screen flex flex-col justify-center items-center md:absolute top-0 left-0 z-10 py-[8vw] px-6 md:pl-12">
         <div>
-          <h1 className="text-[#ffc436] ~text-2xl/5xl text-left mb-14 tracking-wide font-fjalla">
+          <h1 className="text-jaune ~text-2xl/5xl text-left mb-14 tracking-wide font-fjalla">
             Découvrez mes projets
           </h1>
           <div className="inline-flex flex-col gap-8 md:gap-[3.2vw] w-full items-start">
@@ -94,13 +94,13 @@ export default function Home() {
                 <div key={project.id} className="flex gap-4 flex-row-reverse md:flex-row">
                   <button
                     onClick={() => handleProjectChange(project.id)}
-                    className={`~text-2xl/4xl tracking-wide font-base text-left font-bold hover:text-[#b3b3b3] transition-all duration-300 ease-in-out md:flex-shrink-0`}
+                    className={`~text-2xl/4xl tracking-wide font-base text-left font-bold hover:text-jaune transition-all duration-300 ease-in-out md:flex-shrink-0`}
                   >
                     {project.title}
                   </button>
                   <div className="flex gap-4 p-2 md:border-l pr-4 md:pr-0 md:pl-4 border-white border-r md:border-r-0">
-                    <button onClick={() => handleProjectChange(project.id, false)}><GoDeviceDesktop className="size-8 md:size-10" /></button>
-                    <button onClick={() => handleProjectChange(project.id, true)}><ImMobile className="size-8 md:size-10" /></button>
+                    <button onClick={() => handleProjectChange(project.id, false)}><GoDeviceDesktop className="size-8 md:size-10 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
+                    <button onClick={() => handleProjectChange(project.id, true)}><ImMobile className="size-8 md:size-10 text-white hover:text-jaune transition-all duration-300 ease-in-out" /></button>
                   </div>
                 </div>
               );
