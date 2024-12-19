@@ -90,7 +90,7 @@ export default function Home() {
           })}
         </div>
       </div>
-      <div className="w-full md:w-auto  flex items-center justify-center  flex-col md:flex-row  mt-8 md:mt-0 md:absolute md:top-6 md:right-[10vw] z-20">
+      <div className="w-full md:w-auto  flex items-center justify-center flex-col mt-8 md:mt-0 md:absolute md:top-6 md:right-[10vw] z-20">
         <p className="text-white text-xl text-center tracking-wide mb-4 font-bold">Version responsive</p>
         <label className='flex cursor-pointer select-none items-center gap-4' >
           <p className="text-white text-sm tracking-wide">Desktop</p>
