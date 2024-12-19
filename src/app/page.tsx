@@ -5,6 +5,9 @@ import ExperienceMobile from "@/components/mobile/ExperienceMobile";
 import { IsDesktopHook } from "@/utils/isDesktop";
 import { Canvas } from "@react-three/fiber";
 import { useState } from "react";
+import { GoDeviceDesktop } from "react-icons/go";
+import { ImMobile } from "react-icons/im";
+
 export type ExperienceProps = {
   projects: {
     id: number;
@@ -33,24 +36,24 @@ export default function Home() {
       title: "Davy baborier",
       shadowColor: "#ff6900",
       img: "/Davy-baborier-16-12-2024.png",
-      tags: "Site administrable\ngestion de projet\n2024",
+      tags: "Site vitrine\nAdministrable\n2024",
       iframe: "https://davybaborier.fr/",
     },
     {
       id: 2,
-      title: "Davy baborier",
-      shadowColor: "#ff6900",
+      title: "Beratone Game",
+      shadowColor: "#ffeecf",
       img: "/Davy-baborier-16-12-2024.png",
-      tags: "Site administrable\ngestion de projet\n2024",
-      iframe: "https://davybaborier.fr/",
+      tags: "Onepage\n2024",
+      iframe: "https://www.beratone-game.com/en-US",
     },
     {
       id: 3,
-      title: "Davy baborier",
-      shadowColor: "#11cd40",
+      title: "Le meilleur vin du monde",
+      shadowColor: "#9b5979",
       img: "/Davy-baborier-16-12-2024.png",
-      tags: "Site administrable\ngestion de projet\n2024",
-      iframe: "https://davybaborier.fr/",
+      tags: "Site vitrine\nE-commerce\n2024",
+      iframe: "https://www.lemeilleurvindumonde.fr/",
     },
   ];
 
@@ -58,9 +61,17 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
-  const handleProjectChange = (projectId: number) => {
-    setLoadingProject(projectId);
-    setIsLoading(true);
+  const handleProjectChange = (projectId: number, isMobile?: boolean) => {
+    if (projectId !== loadingProject) {
+      setLoadingProject(projectId);
+      if (isMobile !== undefined) {
+        setIsMobile(isMobile);
+      }
+      setIsLoading(true);
+    } else if (isMobile !== undefined) {
+      setIsMobile(isMobile);
+      setIsLoading(true);
+    }
   };
 
   const toggleView = () => {
@@ -72,28 +83,34 @@ export default function Home() {
 
   return (
     <main className="w-screen flex flex-col md:flex-row relative overflow-x-hidden bg-[#241a1a]">
-      <div className="w-full md:w-[40vw] md:absolute top-0 left-0 z-10 py-[8vw]">
-        <h1 className="text-white ~text-2xl/5xl text-center mb-14 tracking-wide font-bold">
-          Découvrez mes projets
-        </h1>
-        <div className="flex flex-col gap-[3.2vw] w-full justify-center px-8">
-          {projects.map((project) => {
-            return (
-              <button
-                key={project.id}
-                onClick={() => handleProjectChange(project.id)}
-                className={`~text-2xl/5xl tracking-wide font-base font-bold hover:text-[#b3b3b3] transition-all duration-300 ease-in-out`}
-              >
-                {project.title}
-              </button>
-            );
-          })}
+      <div className="w-full md:w-[40vw] md:h-screen flex flex-col justify-center items-center md:absolute top-0 left-0 z-10 py-[8vw] px-6 md:pl-12">
+        <div>
+          <h1 className="text-[#ffc436] ~text-2xl/5xl text-left mb-14 tracking-wide font-fjalla">
+            Découvrez mes projets
+          </h1>
+          <div className="inline-flex flex-col gap-8 md:gap-[3.2vw] w-full items-start">
+            {projects.map((project) => {
+              return (
+                <div key={project.id} className="flex gap-4 flex-row-reverse md:flex-row">
+                  <button
+                    onClick={() => handleProjectChange(project.id)}
+                    className={`~text-2xl/4xl tracking-wide font-base text-left font-bold hover:text-[#b3b3b3] transition-all duration-300 ease-in-out flex-shrink-0`}
+                  >
+                    {project.title}
+                  </button>
+                  <div className="flex gap-4 p-2 md:border-l pr-4 md:pr-0 md:pl-4 border-white border-r md:border-r-0">
+                    <button onClick={() => handleProjectChange(project.id, false)}><GoDeviceDesktop className="size-8 md:size-10" /></button>
+                    <button onClick={() => handleProjectChange(project.id, true)}><ImMobile className="size-8 md:size-10" /></button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-      <div className="w-full md:w-auto  flex items-center justify-center flex-col mt-8 md:mt-0 md:absolute md:top-6 md:right-[10vw] z-20">
-        <p className="text-white text-xl text-center tracking-wide mb-4 font-bold">Version responsive</p>
+      <div className="w-full md:w-auto  flex items-center justify-center flex-col mt-8 md:mt-0 md:absolute md:top-8 md:right-8 z-20">
         <label className='flex cursor-pointer select-none items-center gap-4' >
-          <p className="text-white text-sm tracking-wide">Desktop</p>
+          <p className="text-white text-xl font-bold tracking-wide">Desktop</p>
           <div className='relative'>
             <input
               type='checkbox'
@@ -107,7 +124,7 @@ export default function Home() {
                 }`}
             ></div>
           </div>
-          <p className="text-white text-sm tracking-wide">Mobile</p>
+          <p className="text-white text-xl font-bold tracking-wide">Mobile</p>
         </label>
       </div>
       <div className="w-full h-screen md:sticky top-0 left-0 z-0 overflow-hidden">

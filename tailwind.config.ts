@@ -21,6 +21,7 @@ const config: Config = {
 			},
 			fontFamily: {
 				base: "var(--font-red-hat-display)",
+				fjalla: "var(--font-fjalla-one)",
 			},
 		},
 	},
