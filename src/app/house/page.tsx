@@ -1,60 +1,60 @@
 "use client";
-import { Model as SmartTv } from '@/components/models/SmartTv';
-import { Environment, PresentationControls, useGLTF } from '@react-three/drei';
+import TextComponent from '@/components/common/TextComponent';
+import { Environment, Html, PresentationControls, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Group, TextureLoader } from 'three';
-
 type HouseProps = {
   activeModel: string;
   targetRotation: number;
+  currentColor: string;
+  setCurrentColor: (color: string) => void;
 }
 
 const ArmChair = () => {
   const armChair = useGLTF('/models/armchair7.glb');
 
   return (
-    <mesh position={[0.4, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
-      <primitive object={armChair.scene} scale={0.7} />
-    </mesh>
+    <>
+      <mesh position={[0, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <primitive object={armChair.scene} scale={0.75} />
+      </mesh>
+      <TextComponent position={[0.65, 0.1, 0]} rotationY={0} rotationZ={Math.PI / 2} rotationX={-Math.PI / 2} >Armchair</TextComponent>
+    </>
   )
 }
 
 const Sofa = () => {
   const sofa = useGLTF('/models/sofa.glb');
   return (
-    <mesh position={[0.4, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
-      <primitive object={sofa.scene} scale={0.55} />
-    </mesh>
+    <>
+      <mesh position={[0, -0.065, 0]} rotation={[0, -Math.PI / 2, -Math.PI]}>
+        <primitive object={sofa.scene} scale={0.55} />
+      </mesh>
+      <TextComponent position={[-0.65, -0.1, 0]} rotationY={0} rotationZ={-Math.PI / 2} rotationX={Math.PI / 2}  >Sofa</TextComponent>
+    </>
   )
 }
 
-const MeubleTv = () => {
-  const meubleTv = useGLTF('/models/meubletv.glb');
-  return (
-    <mesh position={[0, 0, 0]}>
-      <primitive object={meubleTv.scene} scale={0.7} />
-    </mesh>
-  )
-}
-
-const Walls = () => {
+const Walls = ({ currentColor }: { currentColor: string }) => {
 
   const [wallpaper38, wallpaper43] = useLoader(TextureLoader, [
     '/textures/walls/wallpaper38.png',
     '/textures/walls/wallpaper43.png'
   ]);
 
+  const wallColor = currentColor === 'wallpaper38' ? wallpaper38 : wallpaper43;
+
   return (
     <group position={[0, -0.025, 0]}>
       <mesh position={[0, 1, -0.975]}>
         <boxGeometry args={[2, 1.8, 0.05]} />
-        <meshStandardMaterial map={wallpaper38 as any} />
+        <meshStandardMaterial map={wallColor as any} />
       </mesh>
       <mesh position={[-0.95, 1, 0.025]} rotation={[0, Math.PI / 2, 0]}>
         <boxGeometry args={[1.95, 1.8, 0.1]} />
-        <meshStandardMaterial map={wallpaper38 as any} />
+        <meshStandardMaterial map={wallColor as any} />
       </mesh>
     </group>
   )
@@ -82,29 +82,74 @@ const Floor = () => {
   )
 }
 
-const House = ({ activeModel, targetRotation }: HouseProps) => {
+const SelectColorWalls = ({ currentColor, setCurrentColor }: { currentColor: string, setCurrentColor: (color: string) => void }) => {
+
+  const wallpapers = [
+    { id: 'wallpaper38', name: 'Blanc' },
+    { id: 'wallpaper43', name: 'Gris' }
+  ];
+
+  return (
+    <div className="mt-4">
+      <h2 className="text-lg font-bold">Couleur des murs :</h2>
+      <div className="flex gap-6 mt-6">
+        {wallpapers.map((wallpaper) => (
+          <div
+            key={wallpaper.id}
+            className="flex flex-col items-center gap-2"
+            onClick={() => setCurrentColor(wallpaper.id)}
+          >
+            <div
+              className={`size-12 rounded-full cursor-pointer transition-all duration-200 ${currentColor === wallpaper.id ? 'ring-4 ring-blue-500' : ''
+                }`}
+              style={{
+                backgroundImage: `url(/textures/walls/${wallpaper.id}.png)`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
+            />
+            <span className="text-sm text-white font-bold">{wallpaper.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const House = ({ activeModel, targetRotation, currentColor, setCurrentColor }: HouseProps) => {
   const groupRef = useRef<Group>(null);
+  const [wallColor, setWallColor] = useState(currentColor);
 
   useFrame(() => {
     if (groupRef.current) {
-      groupRef.current.rotation.y += (-targetRotation - groupRef.current.rotation.y) * 0.05;
+      groupRef.current.rotation.z += (targetRotation - groupRef.current.rotation.z) * 0.05;
     }
   });
+
+  useEffect(() => {
+    setWallColor(currentColor);
+  }, [currentColor]);
 
   return (
     <group
       position={[0, -1, 0]}
       name="house"
-      ref={groupRef as any}
     >
-      <Walls />
-      <Floor />
-      {activeModel === 'armchair' ? <ArmChair /> : <Sofa />}
-      <Environment preset="sunset" />
-      <group position={[-0.758, 0.05, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <MeubleTv />
-        <SmartTv scale={0.1} position={[0, 0.298, 0]} />
+      <Walls currentColor={wallColor} />
+      <group rotation={[0, 0, 0]} ref={groupRef as any}>
+        <Floor />
+        <ArmChair />
+        <Sofa />
       </group>
+      <Html
+        transform
+        wrapperClass="htmlScreen"
+        distanceFactor={1.17}
+        position={[0.7, 1.6, - 0.92]}
+      >
+        <SelectColorWalls currentColor={currentColor} setCurrentColor={setCurrentColor} />
+      </Html>
+      <Environment preset="sunset" />
     </group>
   );
 };
@@ -114,10 +159,14 @@ const Scene = () => {
   const [targetRotation, setTargetRotation] = useState(0);
   const section1Ref = useRef(null);
   const section2Ref = useRef(null);
+  const [currentColor, setCurrentColor] = useState('wallpaper38');
 
-  const handleModelChange = (newModel: string) => {
-    setTargetRotation(prev => prev + Math.PI * 2);
+  const handleColorChange = (color: string) => {
+    setCurrentColor(color);
+  }
 
+  const handleModelChange = (newModel: string, valueRotation: number) => {
+    setTargetRotation(valueRotation);
     setTimeout(() => {
       setActiveModel(newModel);
     }, 200);
@@ -125,20 +174,22 @@ const Scene = () => {
 
   useEffect(() => {
     // Observer setup
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (entry.target === section1Ref.current) {
-              handleModelChange('armchair');
+              handleModelChange('armchair', 0);
             } else if (entry.target === section2Ref.current) {
-              handleModelChange('sofa');
+              handleModelChange('sofa', Math.PI);
             }
           }
         });
       },
       { threshold: 0.5 }
     );
+
 
     if (section1Ref.current) observer.observe(section1Ref.current);
     if (section2Ref.current) observer.observe(section2Ref.current);
@@ -163,7 +214,7 @@ const Scene = () => {
   }, []);
 
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end bg-blue-950">
       <div
         className="w-3/4 h-screen fixed top-0 left-0 canvas-container touch-none"
       >
@@ -184,24 +235,25 @@ const Scene = () => {
             <ambientLight intensity={0.5} />
             <directionalLight position={[5, 5, 5]} intensity={1} />
             <Suspense fallback={null}>
-              <axesHelper args={[5]} />
-              <House activeModel={activeModel} targetRotation={targetRotation} />
+              <House activeModel={activeModel} targetRotation={targetRotation} currentColor={currentColor} setCurrentColor={handleColorChange} />
             </Suspense>
           </PresentationControls>
         </Canvas>
       </div>
       <div className="w-1/4 p-6 overflow-y-auto">
         <div ref={section1Ref} data-item="armchair" className='h-screen flex flex-col justify-center items-start gap-5 px-4'>
-          <h2 className='text-2xl font-bold'>Modèle de canapé 1</h2>
+          <h2 className='text-2xl font-bold'>Modèle : Armchair</h2>
           <p className="text-lg">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nul
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
           </p>
+          <SelectColorWalls currentColor={currentColor} setCurrentColor={handleColorChange} />
         </div>
         <div ref={section2Ref} data-item="sofa" className='h-screen flex flex-col justify-center items-start gap-5 px-4'>
-          <h2 className='text-2xl font-bold'>Modèle de canapé 2</h2>
+          <h2 className='text-2xl font-bold'>Modèle : Sofa</h2>
           <p className="text-lg">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nul
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
           </p>
+          <SelectColorWalls currentColor={currentColor} setCurrentColor={handleColorChange} />
         </div>
       </div>
     </div>
