@@ -62,8 +62,8 @@ const Walls = ({ currentColor }: { currentColor: string }) => {
 
 const Floor = () => {
   const [woodParquet91, woodParquet92] = useLoader(TextureLoader, [
-    '/textures/floor/woodParquet91.png',
-    '/textures/floor/woodParquet92.png'
+    '/textures/floor/woodparquet91.png',
+    '/textures/floor/woodparquet92.png'
   ]);
 
   woodParquet91.repeat.set(4, 4);
